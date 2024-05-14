@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://{{username}}:{{password}}@{{host}}:5432/{{database}}
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: { { username } }
+      POSTGRES_PASSWORD: { { password } }
+      POSTGRES_DB: { { database } }
