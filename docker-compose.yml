@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: stockmastermind
+      POSTGRES_DB: db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nestjs:
+    build: .
+    container_name: nestjs
+    environment:
+      DATABASE_URL: postgresql://admin:stockmastermind@postgres:5432/db
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
