@@ -13,18 +13,20 @@ import {
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { filter } from 'rxjs';
+import { ArticleQueryParams } from 'src/validators/article.validator';
 
 @Controller('article')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   @Get('/')
-  async getArticlesController(@Query() filter: URLSearchParams) {
-    console.log(filter);
-    return this.articleService.getArticles(
-      filter.toString() ? JSON.parse(filter.toString()) : {},
-    );
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  )
+  async getArticlesController(@Query() filter: ArticleQueryParams) {
+    return this.articleService.getArticles(filter);
   }
 
   @Get(':id')

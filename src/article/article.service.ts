@@ -2,13 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { Article } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { transformQueryParamsIntoSQLWhere } from 'src/utils/common';
+import { ArticleQueryParams } from 'src/validators/article.validator';
 
 @Injectable()
 export class ArticleService {
   constructor(private prismaService: PrismaService) {}
-  async getArticles(filter?: any) {
-    console.log(filter, ' pitp');
-    return this.prismaService.article.findMany();
+  async getArticles(filter?: ArticleQueryParams) {
+    return this.prismaService.article.findMany({
+      where: {
+        AND: [
+          filter.family_id ? { familyId: Number(filter.family_id) } : {},
+          filter.search
+            ? {
+                OR: [
+                  { code: { contains: filter.search, mode: 'insensitive' } },
+                  { name: { contains: filter.search, mode: 'insensitive' } },
+                  { model: { contains: filter.search, mode: 'insensitive' } },
+                ],
+              }
+            : {},
+        ],
+      },
+      orderBy: filter.sort
+        ? { [filter.sort]: filter.sort_dir === 'asc' ? 'asc' : 'desc' }
+        : undefined,
+    });
   }
 
   async getArticleById(id: number) {
@@ -58,17 +76,6 @@ export class ArticleService {
     return this.prismaService.article.delete({
       where: {
         id,
-      },
-    });
-  }
-
-  async changeArticleStock(id: number, stock: number) {
-    return this.prismaService.article.update({
-      where: {
-        id,
-      },
-      data: {
-        stock,
       },
     });
   }
