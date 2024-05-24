@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Article } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { transformQueryParamsIntoSQLWhere } from 'src/utils/common';
 
 @Injectable()
 export class ArticleService {
   constructor(private prismaService: PrismaService) {}
-
-  async getArticles() {
+  async getArticles(filter?: any) {
+    console.log(filter, ' pitp');
     return this.prismaService.article.findMany();
   }
 
@@ -42,7 +43,7 @@ export class ArticleService {
     });
   }
 
-  async updateArticle(id: number, data: Article) {
+  async updateArticle(id: number, data: Omit<Article, 'id'>) {
     return this.prismaService.article.update({
       where: {
         id,
