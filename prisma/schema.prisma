@@ -22,15 +22,17 @@ model Article {
   code String
   name String
   model String
-  salePrice Float
-  purchasePrice Float
+  sale_price Float
+  security_stock Int
   stock Int
-  repositionCount Int
-  requestPoint Int
+  max_stock Int
+  order_point Int
+  storage_cost Float
   orderArticles OrderArticle[]
   saleArticles SaleArticle[]
   familyId Int
   family Family @relation(fields: [familyId], references: [id])
+  providerArticles ProviderArticle[]
 }
 
 model OrderArticle {
@@ -53,10 +55,31 @@ model Order {
   orderStatus OrderStatus @relation(fields: [orderStatusId], references: [id])
 }
 
+model ProviderArticle {
+  id Int @id @default(autoincrement())
+  articleId Int
+  article Article @relation(fields: [articleId], references: [id])
+  providerId Int
+  provider Provider @relation(fields: [providerId], references: [id])
+  price Float
+}
+
 model Provider {
   id Int @id @default(autoincrement())
   name String
+  is_default Boolean
   orders Order[]
+  providerArticles ProviderArticle[]
+  providerDiscounts ProviderDiscount[]
+}
+
+model ProviderDiscount {
+  id Int @id @default(autoincrement())
+  providerId Int
+  provider Provider @relation(fields: [providerId], references: [id])
+  start_price Float
+  end_price Float
+  discount Float
 }
 
 model OrderStatus {
