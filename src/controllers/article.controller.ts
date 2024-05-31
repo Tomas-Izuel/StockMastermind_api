@@ -10,10 +10,9 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
-import { ArticleService } from './article.service';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
+import { ArticleService } from '../services/article.service';
 import { ArticleQueryParams } from 'src/validators/article.validator';
+import { CreateArticleDto, UpdateArticleDto } from 'src/dtos/article.dto';
 
 @Controller('article')
 export class ArticleController {

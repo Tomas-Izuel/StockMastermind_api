@@ -6,8 +6,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { FamilyService } from './family.service';
-import { CreateFamilyDto } from './dto/create-family.dto';
+import { CreateFamilyDto } from 'src/dtos/family.dto';
+import { FamilyService } from 'src/services/family.service';
 
 @Controller('family')
 export class FamilyController {

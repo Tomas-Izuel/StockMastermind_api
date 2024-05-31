@@ -7,9 +7,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SaleStatusService } from './sale-status.service';
-import { CreateSaleStatusDto } from './dto/create-sale-status.dto';
-import { EditSaleStatusDto } from './dto/edit-sale-status.dto';
+import {
+  CreateSaleStatusDto,
+  EditSaleStatusDto,
+} from 'src/dtos/sale-status.dto';
+import { SaleStatusService } from 'src/services/sale-status.service';
 
 @Controller('sale-status')
 export class SaleStatusController {
