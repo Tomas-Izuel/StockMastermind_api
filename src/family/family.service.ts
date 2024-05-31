@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Family } from '@prisma/client';
+import { family } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FamilyService {
   constructor(private prismaService: PrismaService) {}
 
-  async getFamilies(): Promise<Family[]> {
+  async getFamilies(): Promise<family[]> {
     return this.prismaService.family.findMany();
   }
 
-  async getFamilyByName(name: string): Promise<Family> {
+  async getFamilyByName(name: string): Promise<family> {
     return this.prismaService.family.findFirst({
       where: {
         name,
@@ -18,7 +18,7 @@ export class FamilyService {
     });
   }
 
-  async createFamily(name: string): Promise<Family> {
+  async createFamily(name: string): Promise<family> {
     return this.prismaService.family.create({
       data: {
         name,

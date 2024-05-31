@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Article } from '@prisma/client';
+import { article } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { transformQueryParamsIntoSQLWhere } from 'src/utils/common';
 import { ArticleQueryParams } from 'src/validators/article.validator';
@@ -11,7 +11,7 @@ export class ArticleService {
     return this.prismaService.article.findMany({
       where: {
         AND: [
-          filter.family_id ? { familyId: Number(filter.family_id) } : {},
+          filter.family_id ? { family_id: Number(filter.family_id) } : {},
           filter.search
             ? {
                 OR: [
@@ -53,7 +53,7 @@ export class ArticleService {
     });
   }
 
-  async createArticle(data: Omit<Article, 'id'>) {
+  async createArticle(data: Omit<article, 'id'>) {
     return this.prismaService.article.create({
       data: {
         ...data,
@@ -61,7 +61,7 @@ export class ArticleService {
     });
   }
 
-  async updateArticle(id: number, data: Omit<Article, 'id'>) {
+  async updateArticle(id: number, data: Omit<article, 'id'>) {
     return this.prismaService.article.update({
       where: {
         id,

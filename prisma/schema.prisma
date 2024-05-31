@@ -1,121 +1,140 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
-
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Family {
-  id Int @id @default(autoincrement())
-  name String
-  articles Article[]
+model family {
+  id       Int    @id @default(autoincrement())
+  name     String
+
+  // Relationships
+  articles article[]
 }
 
-model Article {
-  id Int @id @default(autoincrement())
-  code String
-  name String
-  model String
-  sale_price Float
-  security_stock Int
-  stock Int
-  max_stock Int
-  order_point Int
-  storage_cost Float
-  orderArticles OrderArticle[]
-  saleArticles SaleArticle[]
-  familyId Int
-  family Family @relation(fields: [familyId], references: [id])
-  providerArticles ProviderArticle[]
+model article {
+  id              Int     @id @default(autoincrement())
+  code            String
+  name            String
+  model           String
+  sale_price      Float
+  security_stock  Int
+  stock           Int
+  max_stock       Int
+  order_point     Int
+  storage_cost    Float
+
+  // Relationships
+  family_id        Int
+  order_articles   order_article[]
+  sale_articles    sale_article[]
+  family           family          @relation(fields: [family_id], references: [id])
+  provider_articles provider_article[]
 }
 
-model OrderArticle {
-  id Int @id @default(autoincrement())
-  articleId Int
-  article Article @relation(fields: [articleId], references: [id])
-  orderId Int
-  order Order @relation(fields: [orderId], references: [id])
-  quantity Int
-  subtotal Float
+model order_article {
+  id          Int     @id @default(autoincrement())
+  quantity    Int
+  subtotal    Float
+  article_id  Int
+  order_id    Int
+
+  // Relationships
+  article  article  @relation(fields: [article_id], references: [id])
+  order    order    @relation(fields: [order_id], references: [id])
 }
 
-model Order {
-  id Int @id @default(autoincrement())
-  date DateTime
-  orderArticles OrderArticle[]
-  providerId Int
-  provider Provider @relation(fields: [providerId], references: [id])
-  orderStatusId Int
-  orderStatus OrderStatus @relation(fields: [orderStatusId], references: [id])
+model order {
+  id           Int       @id @default(autoincrement())
+  date         DateTime
+
+  // Relationships
+  order_articles   order_article[]
+  provider_id      Int
+  provider         provider       @relation(fields: [provider_id], references: [id])
+  order_status_id  Int
+  order_status     order_status   @relation(fields: [order_status_id], references: [id])
 }
 
-model ProviderArticle {
-  id Int @id @default(autoincrement())
-  articleId Int
-  article Article @relation(fields: [articleId], references: [id])
-  providerId Int
-  provider Provider @relation(fields: [providerId], references: [id])
-  price Float
+model provider_article {
+  id          Int     @id @default(autoincrement())
+  price       Float
+  article_id  Int
+  provider_id Int
+
+  // Relationships
+  article   article   @relation(fields: [article_id], references: [id])
+  provider  provider  @relation(fields: [provider_id], references: [id])
 }
 
-model Provider {
-  id Int @id @default(autoincrement())
-  name String
-  is_default Boolean
-  orders Order[]
-  providerArticles ProviderArticle[]
-  providerDiscounts ProviderDiscount[]
+model provider {
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  is_default          Boolean
+  provider_articles   provider_article[]
+  provider_discounts  provider_discount[]
+  orders              order[]
 }
 
-model ProviderDiscount {
-  id Int @id @default(autoincrement())
-  providerId Int
-  provider Provider @relation(fields: [providerId], references: [id])
+model provider_discount {
+  id          Int     @id @default(autoincrement())
   start_price Float
-  end_price Float
-  discount Float
+  end_price   Float
+  discount    Float
+  provider_id Int
+
+  // Relationships
+  provider  provider  @relation(fields: [provider_id], references: [id])
 }
 
-model OrderStatus {
-  id Int @id @default(autoincrement())
-  status String
-  orders Order[]
+model order_status {
+  id      Int     @id @default(autoincrement())
+  status  String
+
+  // Relationships
+  orders  order[]
 }
 
-model SaleArticle {
-  id Int @id @default(autoincrement())
-  articleId Int
-  article Article @relation(fields: [articleId], references: [id])
-  saleId Int
-  sale Sale @relation(fields: [saleId], references: [id])
-  quantity Int
-  subtotal Float
+model sale_article {
+  id          Int     @id @default(autoincrement())
+  quantity    Int
+  subtotal    Float
+  article_id  Int
+  sale_id     Int
+
+  // Relationships
+  article  article  @relation(fields: [article_id], references: [id])
+  sale     sale     @relation(fields: [sale_id], references: [id])
 }
 
-model Sale {
-  id Int @id @default(autoincrement())
-  date DateTime
-  saleArticles SaleArticle[]
-  clientId Int
-  client Client @relation(fields: [clientId], references: [id])
-  saleStatusId Int
-  saleStatus SaleStatus @relation(fields: [saleStatusId], references: [id])
+model sale {
+  id              Int       @id @default(autoincrement())
+  date            DateTime
+
+  // Relationships
+  sale_articles    sale_article[]
+  client_id        Int
+  client           client        @relation(fields: [client_id], references: [id])
+  sale_status_id   Int
+  sale_status      sale_status   @relation(fields: [sale_status_id], references: [id])
 }
 
-model Client {
-  id Int @id @default(autoincrement())
-  name String
-  sales Sale[]
+model client {
+  id     Int     @id @default(autoincrement())
+  name   String
+
+  // Relationships
+  sales  sale[]
 }
 
-model SaleStatus {
-  id Int @id @default(autoincrement())
-  status String
-  sales Sale[]
+model sale_status {
+  id      Int     @id @default(autoincrement())
+  status  String
+
+  // Relationships
+  sales  sale[]
 }
