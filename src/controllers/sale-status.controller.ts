@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -28,7 +30,7 @@ export class SaleStatusController {
     return this.saleStatusService.createSaleStatus(data);
   }
 
-  @Post('/edit/:id')
+  @Put('/edit/:id')
   @UsePipes(new ValidationPipe())
   async editSaleStatusController(
     @Body() data: EditSaleStatusDto,
@@ -37,7 +39,7 @@ export class SaleStatusController {
     return this.saleStatusService.editSaleStatus(id, data);
   }
 
-  @Post('/delete/:id')
+  @Delete('/delete/:id')
   @UsePipes(new ValidationPipe())
   async deleteSaleStatusController(@Param('id') id: number) {
     return this.saleStatusService.deleteSaleStatus(id);
