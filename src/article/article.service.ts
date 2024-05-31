@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { article } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { transformQueryParamsIntoSQLWhere } from 'src/utils/common';
 import { ArticleQueryParams } from 'src/validators/article.validator';
 
 @Injectable()
