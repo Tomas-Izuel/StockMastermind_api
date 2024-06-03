@@ -6,6 +6,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class DiscountShipCostService {
   constructor(private prismaService: PrismaService) { }
 
+  async getDiscountShipCost() {
+    return this.prismaService.provider_discount.findMany();
+  }
+
   async getDiscountShipCostByProviderId(providerId: number) {
     return this.prismaService.provider_discount.findMany({
       where: {
@@ -40,6 +44,17 @@ export class DiscountShipCostService {
             provider_id: providerId,
           },
         ],
+      },
+    });
+  }
+
+  async updateDiscountShipCost(id: number, data: Partial<provider_discount>) {
+    return this.prismaService.provider_discount.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
       },
     });
   }
