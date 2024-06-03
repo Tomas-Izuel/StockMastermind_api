@@ -8,11 +8,6 @@ export class SaleController {
     constructor(private saleService: SaleService) { }
 
     @Get('/')
-    @UsePipes(
-        new ValidationPipe({
-            whitelist: true,
-        }),
-    )
     async getSalesController() {
         return this.saleService.getSales();
     }
