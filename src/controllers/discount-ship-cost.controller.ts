@@ -23,7 +23,7 @@ export class DiscountShipCostController {
 
   @Get(':id')
   async getDiscountShipCostById(@Param('id') id: number) {
-    return await this.discountShipCostService.getDiscountShipCostById(id);
+    return await this.discountShipCostService.getDiscountShipCostByProviderId(id);
   }
 
   @Post()
