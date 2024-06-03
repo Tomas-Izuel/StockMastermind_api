@@ -7,4 +7,4 @@ import { FamilyService } from 'src/services/family.service';
   controllers: [FamilyController],
   providers: [FamilyService, PrismaService],
 })
-export class FamilyModule {}
+export class FamilyModule { }

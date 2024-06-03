@@ -15,7 +15,7 @@ import { OrderStatusService } from 'src/services/order-status.service';
 
 @Controller('client')
 export class ClientController {
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService) { }
 
   @Get('/')
   async getClients() {

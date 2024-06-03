@@ -11,7 +11,7 @@ import { FamilyService } from 'src/services/family.service';
 
 @Controller('family')
 export class FamilyController {
-  constructor(private familyService: FamilyService) {}
+  constructor(private familyService: FamilyService) { }
 
   @Get('/')
   async getFamiliesController() {
@@ -29,6 +29,6 @@ export class FamilyController {
         return existingFamily;
       }
       return this.familyService.createFamily(data.name);
-    } catch (error) {}
+    } catch (error) { }
   }
 }

@@ -6,4 +6,4 @@ import { DiscountShipCostService } from 'src/services/discount-ship-cost.service
   controllers: [DiscountShipCostController],
   providers: [DiscountShipCostService],
 })
-export class DiscountShipCostModule {}
+export class DiscountShipCostModule { }

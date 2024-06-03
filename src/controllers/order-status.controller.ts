@@ -15,7 +15,7 @@ import { EditSaleStatusDto } from 'src/dtos/sale-status.dto';
 
 @Controller('order-status')
 export class OrderStatusController {
-  constructor(private orderStatusService: OrderStatusService) {}
+  constructor(private orderStatusService: OrderStatusService) { }
 
   @Get('/')
   async getOrderStatus() {

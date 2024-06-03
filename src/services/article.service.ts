@@ -5,7 +5,7 @@ import { ArticleQueryParams } from 'src/validators/article.validator';
 
 @Injectable()
 export class ArticleService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
   async getArticles(filter?: ArticleQueryParams) {
     return this.prismaService.article.findMany({
       where: {
@@ -13,12 +13,12 @@ export class ArticleService {
           filter.family_id ? { family_id: Number(filter.family_id) } : {},
           filter.search
             ? {
-                OR: [
-                  { code: { contains: filter.search, mode: 'insensitive' } },
-                  { name: { contains: filter.search, mode: 'insensitive' } },
-                  { model: { contains: filter.search, mode: 'insensitive' } },
-                ],
-              }
+              OR: [
+                { code: { contains: filter.search, mode: 'insensitive' } },
+                { name: { contains: filter.search, mode: 'insensitive' } },
+                { model: { contains: filter.search, mode: 'insensitive' } },
+              ],
+            }
             : {},
         ],
       },

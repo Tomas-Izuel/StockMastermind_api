@@ -16,7 +16,7 @@ import { CreateArticleDto, UpdateArticleDto } from 'src/dtos/article.dto';
 
 @Controller('article')
 export class ArticleController {
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService) { }
 
   @Get('/')
   @UsePipes(
