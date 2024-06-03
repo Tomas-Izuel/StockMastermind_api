@@ -10,6 +10,7 @@ import {
     Query,
     Delete,
 } from '@nestjs/common';
+import { EditDemandParamDto } from 'src/dtos/demand-params.dto';
 
 import { DemandParamsService } from 'src/services/demand-params.service';
 
@@ -35,7 +36,7 @@ export class DemandParamsController {
 
     @Put(':id')
     @UsePipes(new ValidationPipe({ transform: true }))
-    async updateDemandParam(@Param('id') id: number, @Body() body: any) {
+    async updateDemandParam(@Param('id') id: number, @Body() body: EditDemandParamDto) {
         return await this.demandParamsService.updateDemandParam(id, body);
     }
 

@@ -5,6 +5,10 @@ import { FamilyModule } from './modules/family.module';
 import { SaleStatusModule } from './modules/sale-status.module';
 import { DiscountShipCostModule } from './modules/discount-ship-cost.module';
 import { SaleModule } from './modules/sale.module';
+import { ClientModule } from './modules/client.module';
+import { DemandParamsModule } from './modules/demand-params.module';
+import { OrderModule } from './modules/order.module';
+import { ProviderModule } from './modules/provider.module';
 
 @Module({
   imports: [
@@ -13,7 +17,11 @@ import { SaleModule } from './modules/sale.module';
     SaleStatusModule,
     OrderStatusModule,
     DiscountShipCostModule,
-    SaleModule
+    SaleModule,
+    ClientModule,
+    DemandParamsModule,
+    OrderModule,
+    ProviderModule
   ],
 })
 export class AppModule { }
