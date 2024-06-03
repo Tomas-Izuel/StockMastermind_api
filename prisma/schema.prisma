@@ -138,3 +138,9 @@ model sale_status {
   // Relationships
   sales  sale[]
 }
+
+model demand_params {
+  method String
+  aceptable_error Float
+  id Int @id @default(autoincrement())
+}
