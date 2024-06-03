@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DiscountShipCostService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async getDiscountShipCostByProviderId(providerId: number) {
     return this.prismaService.provider_discount.findMany({

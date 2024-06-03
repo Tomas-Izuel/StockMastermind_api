@@ -17,7 +17,7 @@ import { SaleStatusService } from 'src/services/sale-status.service';
 
 @Controller('sale-status')
 export class SaleStatusController {
-  constructor(private saleStatusService: SaleStatusService) {}
+  constructor(private saleStatusService: SaleStatusService) { }
 
   @Get('/')
   async getSaleStatusController() {

@@ -7,4 +7,4 @@ import { SaleStatusService } from 'src/services/sale-status.service';
   controllers: [SaleStatusController],
   providers: [SaleStatusService, PrismaService],
 })
-export class SaleStatusModule {}
+export class SaleStatusModule { }
