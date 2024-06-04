@@ -17,8 +17,8 @@ datasource db {
 
  model article {
    id              Int     @id @default(autoincrement())
-   code            String
-   name            String
+   code            String @unique
+   name            String @unique
    model           String
    price           Float
    security_stock  Int
@@ -37,7 +37,8 @@ datasource db {
  }
 
 model provider {
-  cuit        Int @id
+  id         Int     @id @default(autoincrement())
+  cuit        Int    @unique
   name        String
   is_default  Boolean
   single_shipment_cost Float
@@ -56,11 +57,12 @@ model provider_article {
 
   // Relationships
   article   article   @relation(fields: [article_id], references: [id])
-  provider  provider  @relation(fields: [provider_id], references: [cuit])
+  provider  provider  @relation(fields: [provider_id], references: [id])
 }
 
 model order {
-  code          Int     @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
+  code          String @unique
   date        DateTime
   shipment_count Int
   subtotal    Float
@@ -88,11 +90,12 @@ model order_article {
 
   // Relationships
   article article @relation(fields: [article_id], references: [id])
-  order   order   @relation(fields: [order_id], references: [code])
+  order   order   @relation(fields: [order_id], references: [id])
 }
 
 model sale{
-  code         Int     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
+  code         String @unique
   date        DateTime
   total       Float
 
@@ -108,10 +111,11 @@ model sale_article{
 
   // Relationships
   article article @relation(fields: [article_id], references: [id])
-  sale    sale    @relation(fields: [sale_id], references: [code])
+  sale    sale    @relation(fields: [sale_id], references: [id])
 }
 
 model client {
-  cuil       Int @id
+  id         Int     @id @default(autoincrement())
+  cuil       Int    @unique
   name       String
 }

@@ -10,6 +10,7 @@ import { DemandParamsModule } from './modules/demand-params.module';
 import { OrderModule } from './modules/order.module';
 import { ProviderModule } from './modules/provider.module';
 import { SaleArticleModule } from './sale-article/sale-article.module';
+import { Article } from './article/article';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { SaleArticleModule } from './sale-article/sale-article.module';
     DemandParamsModule,
     OrderModule,
     ProviderModule,
-    SaleArticleModule
+    SaleArticleModule,
   ],
+  providers: [Article],
 })
-export class AppModule { }
+export class AppModule {}
