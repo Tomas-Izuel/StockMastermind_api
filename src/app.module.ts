@@ -9,6 +9,7 @@ import { ClientModule } from './modules/client.module';
 import { DemandParamsModule } from './modules/demand-params.module';
 import { OrderModule } from './modules/order.module';
 import { ProviderModule } from './modules/provider.module';
+import { SaleArticleModule } from './sale-article/sale-article.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ProviderModule } from './modules/provider.module';
     ClientModule,
     DemandParamsModule,
     OrderModule,
-    ProviderModule
+    ProviderModule,
+    SaleArticleModule
   ],
 })
 export class AppModule { }
