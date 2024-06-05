@@ -19,6 +19,12 @@ export class PrismaOrderArticleRepository implements OrderArticleRepository {
     });
   }
 
+  async createMany(data: Omit<order_article, 'id'>[]) {
+    return this.prismaService.order_article.createMany({
+      data: data.map((d) => ({ ...d })),
+    });
+  }
+
   async update(id: number, data: Partial<order_article>) {
     return this.prismaService.order_article.update({
       where: {
