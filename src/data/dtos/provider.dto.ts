@@ -53,3 +53,39 @@ export class CreateProvider {
   provider: CreateProviderDto;
   articles: CreateArticleProviderDto[] = [];
 }
+
+export class UpdateProviderDto {
+  @IsNumber({
+    allowNaN: false,
+    allowInfinity: false,
+    maxDecimalPlaces: 0,
+  })
+  @Min(11)
+  @Max(11)
+  @IsOptional()
+  cuit: number;
+  @IsString({
+    message: 'El nombre del proveedor debe ser un string válido.',
+  })
+  @IsOptional()
+  name: string;
+  @IsBoolean()
+  @IsOptional()
+  is_default: boolean;
+  @IsNumber({
+    allowNaN: false,
+    allowInfinity: false,
+    maxDecimalPlaces: 2,
+  })
+  @IsOptional()
+  single_shipment_cost: number;
+  @IsOptional()
+  shipment_time: Date;
+  @IsNumber({
+    allowNaN: false,
+    allowInfinity: false,
+    maxDecimalPlaces: 0,
+  })
+  @IsOptional()
+  shipment_max_size: number;
+}
