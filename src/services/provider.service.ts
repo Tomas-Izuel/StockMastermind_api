@@ -2,18 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { provider } from '@prisma/client';
 import { CreateProviderData } from 'src/data/types/provider';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
-import { PrismaProviderArticleRepository } from 'src/repositories/provider-article.repository';
 import { PrismaProviderRepository } from 'src/repositories/provider.repository';
+import { ProviderArticleService } from './provider-article.service';
 
 @Injectable()
 export class ProviderService {
   providerRepository: PrismaProviderRepository;
-  providerArticleRepository: PrismaProviderArticleRepository;
-  constructor(private prismaService: PrismaService) {
+  constructor(
+    private prismaService: PrismaService,
+    private providerArticle: ProviderArticleService,
+  ) {
     this.providerRepository = new PrismaProviderRepository(prismaService);
-    this.providerArticleRepository = new PrismaProviderArticleRepository(
-      prismaService,
-    );
   }
 
   async getProviders() {
@@ -31,9 +30,8 @@ export class ProviderService {
       provider_id: provider.id,
     }));
 
-    const providerArticles = await Promise.all(
-      articles.map((article) => this.providerArticleRepository.create(article)),
-    );
+    const providerArticles =
+      await this.providerArticle.createManyArticlesProvider(articles);
 
     return { provider, providerArticles };
   }
@@ -47,12 +45,6 @@ export class ProviderService {
   }
 
   async changeArticlePrice(articleId: number, price: number) {
-    const providerArticle =
-      await this.providerArticleRepository.findByArticleId(articleId);
-
-    if (!providerArticle) {
-      throw new Error('Article not found');
-    }
-    return this.providerArticleRepository.update(providerArticle.id, { price });
+    return this.providerArticle.changeArticlePrice(articleId, price);
   }
 }
