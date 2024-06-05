@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { family } from '@prisma/client';
-import { FamilyRepository } from 'src/data/types/Family';
+import { FamilyRepository } from 'src/data/types/family';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 
 @Injectable()
