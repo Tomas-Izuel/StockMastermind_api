@@ -13,6 +13,14 @@ export class PrismaProviderArticleRepository
     return this.prismaService.provider_article.findMany();
   }
 
+  async findByArticleId(article_id: number) {
+    return this.prismaService.provider_article.findFirst({
+      where: {
+        article_id,
+      },
+    });
+  }
+
   async create(data: Omit<provider_article, 'id'>) {
     return this.prismaService.provider_article.create({
       data: {
