@@ -11,7 +11,7 @@ export class CommonPaginationParams {
   @IsString()
   @IsOptional()
   search: string;
-  @IsString()
+  @IsEnum(sortDir)
   @IsOptional()
   sort: string;
   @IsEnum(sortDir)

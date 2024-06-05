@@ -4,7 +4,7 @@ import { ProviderRepository } from 'src/data/types/provider';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 
 @Injectable()
-export class PrismaArticleRepository implements ProviderRepository {
+export class PrismaProviderRepository implements ProviderRepository {
   constructor(private prismaService: PrismaService) {}
 
   async findAll() {

@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { article } from '@prisma/client';
 import { FilterArticle } from 'src/data/types/article';
+import { PrismaService } from 'src/lib/prisma/prisma.service';
 import { PrismaArticleRepository } from 'src/repositories/article.repository';
 
 @Injectable()
 export class ArticleService {
-  constructor(private articleRepository: PrismaArticleRepository) {}
+  articleRepository: PrismaArticleRepository;
+  constructor(private prismaService: PrismaService) {
+    this.articleRepository = new PrismaArticleRepository(prismaService);
+  }
 
   async getArticles(filter: FilterArticle) {
     return this.articleRepository.findAll(filter);

@@ -29,7 +29,6 @@ export class ArticleController {
     return this.articleService.getArticles(
       paginateParams({
         ...filter,
-        sort_dir: filter.sort_dir as 'asc' | 'desc',
         family_id: Number(filter.family_id),
       }),
     );
