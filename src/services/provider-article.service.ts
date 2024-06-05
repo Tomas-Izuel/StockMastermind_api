@@ -13,8 +13,8 @@ export class ProviderArticleService {
   }
 
   async createManyArticlesProvider(data: Omit<provider_article, 'id'>[]) {
-    const providerArticles = await Promise.all(
-      data.map((article) => this.providerArticleRepository.create(article)),
+    const providerArticles = await this.providerArticleRepository.createMany(
+      data,
     );
 
     return providerArticles;

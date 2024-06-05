@@ -29,6 +29,14 @@ export class PrismaProviderArticleRepository
     });
   }
 
+  async createMany(data: Omit<provider_article, 'id'>[]) {
+    return this.prismaService.provider_article.createMany({
+      data: data.map((article) => ({
+        ...article,
+      })),
+    });
+  }
+
   async update(id: number, data: Partial<provider_article>) {
     return this.prismaService.provider_article.update({
       where: {
