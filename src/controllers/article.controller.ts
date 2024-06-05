@@ -11,6 +11,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CreateArticleDto, UpdateArticleDto } from 'src/data/dtos/article.dto';
+import { paginateParams } from 'src/lib/utils/params.common';
 import { ArticleQueryParams } from 'src/lib/validators/article.validator';
 import { ArticleService } from 'src/services/article.service';
 
@@ -25,7 +26,13 @@ export class ArticleController {
     }),
   )
   async getArticlesController(@Query() filter: ArticleQueryParams) {
-    return this.articleService.getArticles(filter);
+    return this.articleService.getArticles(
+      paginateParams({
+        ...filter,
+        sort_dir: filter.sort_dir as 'asc' | 'desc',
+        family_id: Number(filter.family_id),
+      }),
+    );
   }
 
   @Get(':id')

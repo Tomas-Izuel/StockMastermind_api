@@ -1,5 +1,3 @@
-import { sortDir } from './common';
-
 export interface CommonRepository<T> {
   findAll?(): Promise<T[]>;
   findOne?(id: number): Promise<T>;
@@ -12,6 +10,6 @@ export interface Filter {
   limit?: number;
   page?: number;
   sort?: string;
-  sort_dir?: sortDir;
+  sort_dir?: 'asc' | 'desc';
   search?: string;
 }
