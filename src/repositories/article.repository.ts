@@ -8,17 +8,24 @@ export class PrismaArticleRepository implements ArticleRepository {
   constructor(private prismaService: PrismaService) {}
 
   async findAll(filter?: FilterArticle) {
+    const where: any = {};
+
+    if (filter?.family_id) {
+      where['family_id'] = filter;
+    }
+
+    if (filter?.search) {
+      where['name'] = {
+        contains: filter.search,
+      };
+    }
+
     return this.prismaService.article.findMany({
-      where: {
-        family_id: filter?.family_id,
-        name: {
-          contains: filter?.search,
-        },
-      },
+      where: where,
       orderBy: {
         [filter?.sort ?? 'id']: filter?.sort_dir ?? 'asc',
       },
-      skip: (filter?.page - 1) * filter?.limit,
+      skip: filter?.page > 1 ? (filter?.page - 1) * filter?.limit : 0,
       take: filter?.limit,
     });
   }
