@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { article } from '@prisma/client';
 import { FilterArticle } from 'src/data/types/article';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
@@ -11,9 +11,29 @@ export class ArticleService {
     this.articleRepository = new PrismaArticleRepository(prismaService);
   }
 
-  async getArticles(filter: FilterArticle) {
-    return this.articleRepository.findAll(filter);
-  }
+  
+    async getArticles(filter?: FilterArticle) {
+      // Verifica si filter está definido y si filter.page no está definido o es menor que 1
+      if (filter && (!filter.page || filter.page < 1)) {
+        // Si filter está definido y filter.page no está definido o es menor que 1,
+        // entonces asigna por defecto page = 1 al filtro
+        filter = { ...filter, page: 1 };
+      }
+    
+      // Calcula el valor de skip basado en el filtro de paginación
+      const skip = filter && filter.page ? (filter.page - 1) * (filter.limit || 10) : undefined;
+    
+      // Llama al método findMany del repositorio PrismaArticle con el filtro actualizado
+      return this.prismaService.article.findMany({
+        where: {},
+        orderBy: {
+          id: "asc"
+        },
+        take: filter ? filter.limit : undefined,
+        skip: skip // Proporciona el valor calculado de skip
+      });
+    }
+    
 
   async getArticleById(id: number) {
     return this.articleRepository.findOne(id);
