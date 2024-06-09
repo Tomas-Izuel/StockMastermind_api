@@ -8,56 +8,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model family {
-  id       Int    @id @default(autoincrement())
-  name     String
+ model family {
+   id       Int    @id @default(autoincrement())
+   name     String
+   // Relationships
+   articles article[]
+ }
+
+ model article {
+   id              Int     @id @default(autoincrement())
+   code            String @unique
+   name            String @unique
+   model           String
+   price           Float
+   security_stock  Int
+   stock           Int
+   max_stock       Int
+   order_point     Int
+   storage_cost    Float
+   size            Int
+   family_id        Int
+
+   // Relationships
+   family           family          @relation(fields: [family_id], references: [id])
+    provider_articles provider_article[]
+    order_articles    order_article[]
+    sale_articles     sale_article[]
+ }
+
+model provider {
+  id         Int     @id @default(autoincrement())
+  cuit        Int    @unique
+  name        String
+  is_default  Boolean
+  single_shipment_cost Float
+  shipment_time DateTime
+  shipment_max_size Int
 
   // Relationships
-  articles article[]
-}
-
-model article {
-  id              Int     @id @default(autoincrement())
-  code            String
-  name            String
-  model           String
-  sale_price      Float
-  security_stock  Int
-  stock           Int
-  max_stock       Int
-  order_point     Int
-  storage_cost    Float
-
-  // Relationships
-  family_id        Int
-  order_articles   order_article[]
-  sale_articles    sale_article[]
-  family           family          @relation(fields: [family_id], references: [id])
   provider_articles provider_article[]
-}
-
-model order_article {
-  id          Int     @id @default(autoincrement())
-  quantity    Int
-  subtotal    Float
-  article_id  Int
-  order_id    Int
-
-  // Relationships
-  article  article  @relation(fields: [article_id], references: [id])
-  order    order    @relation(fields: [order_id], references: [id])
-}
-
-model order {
-  id           Int       @id @default(autoincrement())
-  date         DateTime
-
-  // Relationships
-  order_articles   order_article[]
-  provider_id      Int
-  provider         provider       @relation(fields: [provider_id], references: [id])
-  order_status_id  Int
-  order_status     order_status   @relation(fields: [order_status_id], references: [id])
 }
 
 model provider_article {
@@ -71,76 +60,62 @@ model provider_article {
   provider  provider  @relation(fields: [provider_id], references: [id])
 }
 
-model provider {
-  id                  Int                 @id @default(autoincrement())
-  name                String
-  is_default          Boolean
-  provider_articles   provider_article[]
-  provider_discounts  provider_discount[]
-  orders              order[]
-}
-
-model provider_discount {
-  id          Int     @id @default(autoincrement())
-  start_price Float
-  end_price   Float
-  discount    Float
-  provider_id Int
+model order {
+  id         Int     @id @default(autoincrement())
+  code          String @unique
+  date        DateTime
+  shipment_count Int
+  subtotal    Float
+  total       Float
+  status_id   Int
+  order_articles order_article[]
 
   // Relationships
-  provider  provider  @relation(fields: [provider_id], references: [id])
+  order_status order_status @relation(fields: [status_id], references: [id])
 }
 
 model order_status {
-  id      Int     @id @default(autoincrement())
-  status  String
+  id          Int     @id @default(autoincrement())
+  name        String
 
   // Relationships
-  orders  order[]
+  orders order[]
 }
 
-model sale_article {
+model order_article {
   id          Int     @id @default(autoincrement())
   quantity    Int
-  subtotal    Float
+  article_id  Int
+  order_id    Int
+
+  // Relationships
+  article article @relation(fields: [article_id], references: [id])
+  order   order   @relation(fields: [order_id], references: [id])
+}
+
+model sale{
+  id          Int     @id @default(autoincrement())
+  code         String @unique
+  date        DateTime
+  total       Float
+
+  // Relationships
+  sale_article sale_article[]
+}
+
+model sale_article{
+  id          Int     @id @default(autoincrement())
+  quantity    Int
   article_id  Int
   sale_id     Int
 
   // Relationships
-  article  article  @relation(fields: [article_id], references: [id])
-  sale     sale     @relation(fields: [sale_id], references: [id])
-}
-
-model sale {
-  id              Int       @id @default(autoincrement())
-  date            DateTime
-
-  // Relationships
-  sale_articles    sale_article[]
-  client_id        Int
-  client           client        @relation(fields: [client_id], references: [id])
-  sale_status_id   Int
-  sale_status      sale_status   @relation(fields: [sale_status_id], references: [id])
+  article article @relation(fields: [article_id], references: [id])
+  sale    sale    @relation(fields: [sale_id], references: [id])
 }
 
 model client {
-  id     Int     @id @default(autoincrement())
-  name   String
-
-  // Relationships
-  sales  sale[]
-}
-
-model sale_status {
-  id      Int     @id @default(autoincrement())
-  status  String
-
-  // Relationships
-  sales  sale[]
-}
-
-model demand_params {
-  method String
-  aceptable_error Float
-  id Int @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
+  cuil       Int    @unique
+  name       String
 }

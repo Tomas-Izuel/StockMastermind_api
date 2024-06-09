@@ -1,47 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { order } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/lib/prisma/prisma.service';
+import { PrismaOrderRepository } from 'src/repositories/order.repository';
+import { OrderArticleService } from './order-article.service';
+import { OrderStatusService } from './order-status.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private prismaService: PrismaService) { }
-
-  async getOrders() {
-    return this.prismaService.order.findMany();
-  }
-
-  async getOrderById(id: number) {
-    return this.prismaService.order.findUnique({
-      where: {
-        id,
-      },
-    });
-  }
-
-  async createOrder(data: Omit<order, 'id'>) {
-    return this.prismaService.order.create({
-      data: {
-        ...data,
-      },
-    });
-  }
-
-  async updateOrder(id: number, data: Partial<order>) {
-    return this.prismaService.order.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-      },
-    });
-  }
-
-  async deleteOrder(id: number) {
-    return this.prismaService.order.delete({
-      where: {
-        id,
-      },
-    });
+  order: PrismaOrderRepository;
+  constructor(
+    private prismaService: PrismaService,
+    private orderArticleService: OrderArticleService,
+    private orderStatusService: OrderStatusService,
+  ) {
+    this.order = new PrismaOrderRepository(prismaService);
   }
 }

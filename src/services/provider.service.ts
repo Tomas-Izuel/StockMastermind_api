@@ -1,47 +1,50 @@
-import { Injectable } from "@nestjs/common";
-import { provider } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { provider } from '@prisma/client';
+import { CreateProviderData } from 'src/data/types/provider';
+import { PrismaService } from 'src/lib/prisma/prisma.service';
+import { PrismaProviderRepository } from 'src/repositories/provider.repository';
+import { ProviderArticleService } from './provider-article.service';
 
 @Injectable()
 export class ProviderService {
-    constructor(private prismaService: PrismaService) { }
+  providerRepository: PrismaProviderRepository;
+  constructor(
+    private prismaService: PrismaService,
+    private providerArticle: ProviderArticleService,
+  ) {
+    this.providerRepository = new PrismaProviderRepository(prismaService);
+  }
 
-    async getProviders() {
-        return this.prismaService.provider.findMany();
-    }
+  async getProviders() {
+    return this.providerRepository.findAll();
+  }
 
-    async getProvider(id: number) {
-        return this.prismaService.provider.findUnique({
-            where: {
-                id
-            }
-        });
-    }
+  async createProvider(data: CreateProviderData) {
+    const provider = await this.providerRepository.create({
+      ...data.provider,
+      is_default: data.provider.is_default || false,
+    });
 
-    async createProvider(data: Omit<provider, 'id'>) {
-        return this.prismaService.provider.create({
-            data: {
-                ...data
-            }
-        });
-    }
+    const articles = data.articles.map((article) => ({
+      ...article,
+      provider_id: provider.id,
+    }));
 
-    async updateProvider(id: number, data: Partial<provider>) {
-        return this.prismaService.provider.update({
-            where: {
-                id
-            },
-            data: {
-                ...data
-            }
-        });
-    }
+    const providerArticles =
+      await this.providerArticle.createManyArticlesProvider(articles);
 
-    async deleteProvider(id: number) {
-        return this.prismaService.provider.delete({
-            where: {
-                id
-            }
-        });
-    }
+    return { provider, providerArticles };
+  }
+
+  async updateProvider(id: number, data: Partial<provider>) {
+    return this.providerRepository.update(id, data);
+  }
+
+  async changeDefaultProvider(id: number) {
+    return this.providerRepository.update(id, { is_default: true });
+  }
+
+  async changeArticlePrice(articleId: number, price: number) {
+    return this.providerArticle.changeArticlePrice(articleId, price);
+  }
 }

@@ -1,81 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { article } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { ArticleQueryParams } from 'src/validators/article.validator';
+import { FilterArticle } from 'src/data/types/article';
+import { PrismaService } from 'src/lib/prisma/prisma.service';
+import { PrismaArticleRepository } from 'src/repositories/article.repository';
 
 @Injectable()
 export class ArticleService {
-  constructor(private prismaService: PrismaService) { }
-  async getArticles(filter?: ArticleQueryParams) {
-    return this.prismaService.article.findMany({
-      where: {
-        AND: [
-          filter.family_id ? { family_id: Number(filter.family_id) } : {},
-          filter.search
-            ? {
-              OR: [
-                { code: { contains: filter.search, mode: 'insensitive' } },
-                { name: { contains: filter.search, mode: 'insensitive' } },
-                { model: { contains: filter.search, mode: 'insensitive' } },
-              ],
-            }
-            : {},
-        ],
-      },
-      orderBy: filter.sort
-        ? { [filter.sort]: filter.sort_dir === 'asc' ? 'asc' : 'desc' }
-        : undefined,
-    });
+  articleRepository: PrismaArticleRepository;
+  constructor(private prismaService: PrismaService) {
+    this.articleRepository = new PrismaArticleRepository(prismaService);
+  }
+
+  async getArticles(filter: FilterArticle) {
+    return this.articleRepository.findAll(filter);
   }
 
   async getArticleById(id: number) {
-    return this.prismaService.article.findFirst({
-      where: {
-        id,
-      },
-    });
+    return this.articleRepository.findOne(id);
   }
 
   async getArticleByCode(code: string) {
-    return this.prismaService.article.findFirst({
-      where: {
-        code,
-      },
-    });
+    return this.articleRepository.getArticleByCode(code);
   }
 
   async getArticleByName(name: string) {
-    return this.prismaService.article.findFirst({
-      where: {
-        name,
-      },
-    });
+    return this.articleRepository.getArticleByName(name);
   }
 
   async createArticle(data: Omit<article, 'id'>) {
-    return this.prismaService.article.create({
-      data: {
-        ...data,
-      },
-    });
+    return this.articleRepository.create(data);
   }
 
-  async updateArticle(id: number, data: Omit<article, 'id'>) {
-    return this.prismaService.article.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-      },
-    });
+  async updateArticle(id: number, data: Partial<article>) {
+    return this.articleRepository.update(id, data);
   }
 
   async deleteArticle(id: number) {
-    return this.prismaService.article.delete({
-      where: {
-        id,
-      },
-    });
+    return this.articleRepository.delete(id);
   }
 }

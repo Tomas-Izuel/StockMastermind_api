@@ -10,13 +10,14 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
-import { ArticleService } from '../services/article.service';
-import { ArticleQueryParams } from 'src/validators/article.validator';
-import { CreateArticleDto, UpdateArticleDto } from 'src/dtos/article.dto';
+import { CreateArticleDto, UpdateArticleDto } from 'src/data/dtos/article.dto';
+import { paginateParams } from 'src/lib/utils/params.common';
+import { ArticleQueryParams } from 'src/lib/validators/article.validator';
+import { ArticleService } from 'src/services/article.service';
 
 @Controller('article')
 export class ArticleController {
-  constructor(private articleService: ArticleService) { }
+  constructor(private articleService: ArticleService) {}
 
   @Get('/')
   @UsePipes(
@@ -25,7 +26,12 @@ export class ArticleController {
     }),
   )
   async getArticlesController(@Query() filter: ArticleQueryParams) {
-    return this.articleService.getArticles(filter);
+    return this.articleService.getArticles(
+      paginateParams({
+        ...filter,
+        family_id: Number(filter.family_id),
+      }),
+    );
   }
 
   @Get(':id')
