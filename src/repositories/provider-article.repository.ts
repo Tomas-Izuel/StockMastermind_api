@@ -55,4 +55,18 @@ export class PrismaProviderArticleRepository
       },
     });
   }
+
+  async findByProviderIdAndArticleId(
+    provider_id: number,
+    article_id: number[],
+  ) {
+    return this.prismaService.provider_article.findMany({
+      where: {
+        provider_id,
+        article_id: {
+          in: article_id,
+        },
+      },
+    });
+  }
 }

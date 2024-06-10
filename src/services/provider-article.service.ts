@@ -29,4 +29,17 @@ export class ProviderArticleService {
     }
     return this.providerArticleRepository.update(providerArticle.id, { price });
   }
+
+  async getArticlesPriceByProviderId(providerId: number, articleId: number[]) {
+    const articles =
+      await this.providerArticleRepository.findByProviderIdAndArticleId(
+        providerId,
+        articleId,
+      );
+
+    return articles.map((article) => ({
+      article_id: article.article_id,
+      price: article.price,
+    }));
+  }
 }

@@ -19,6 +19,14 @@ export class PrismaProviderRepository implements ProviderRepository {
     });
   }
 
+  async getDefaultProvider() {
+    return this.prismaService.provider.findFirst({
+      where: {
+        is_default: true,
+      },
+    });
+  }
+
   async create(data: Omit<provider, 'id'>) {
     return this.prismaService.provider.create({
       data: {

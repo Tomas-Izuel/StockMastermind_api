@@ -4,7 +4,8 @@ import { OrderStatusService } from '../services/order_status.service';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 
 @Module({
-    controllers: [OrderStatusController],
-    providers: [OrderStatusService, PrismaService],
+  controllers: [OrderStatusController],
+  providers: [OrderStatusService, PrismaService],
+  exports: [OrderStatusService], // Exportar el servicio
 })
-export class OrderStatusModule { }
+export class OrderStatusModule {}

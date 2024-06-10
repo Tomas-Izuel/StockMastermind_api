@@ -47,6 +47,7 @@ model provider {
 
   // Relationships
   provider_articles provider_article[]
+  orders           order[]
 }
 
 model provider_article {
@@ -68,18 +69,12 @@ model order {
   subtotal    Float
   total       Float
   status_id   Int
+  provider_id Int
   order_articles order_article[]
 
   // Relationships
   order_status order_status @relation(fields: [status_id], references: [id])
-}
-
-model order_status {
-  id          Int     @id @default(autoincrement())
-  name        String
-
-  // Relationships
-  orders order[]
+  provider     provider     @relation(fields: [provider_id], references: [id])
 }
 
 model order_article {
@@ -91,6 +86,14 @@ model order_article {
   // Relationships
   article article @relation(fields: [article_id], references: [id])
   order   order   @relation(fields: [order_id], references: [id])
+}
+
+model order_status {
+  id          Int     @id @default(autoincrement())
+  name        String
+
+  // Relationships
+  orders order[]
 }
 
 model sale{

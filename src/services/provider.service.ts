@@ -19,6 +19,14 @@ export class ProviderService {
     return this.providerRepository.findAll();
   }
 
+  async getProviderById(id: number) {
+    return this.providerRepository.findOne(id);
+  }
+
+  async getDefaulProvider() {
+    return this.providerRepository.getDefaultProvider();
+  }
+
   async createProvider(data: CreateProviderData) {
     const provider = await this.providerRepository.create({
       ...data.provider,
@@ -46,5 +54,12 @@ export class ProviderService {
 
   async changeArticlePrice(articleId: number, price: number) {
     return this.providerArticle.changeArticlePrice(articleId, price);
+  }
+
+  async getArticlesPriceByProviderId(providerId: number, articleId: number[]) {
+    return this.providerArticle.getArticlesPriceByProviderId(
+      providerId,
+      articleId,
+    );
   }
 }
