@@ -17,6 +17,13 @@ import { OrderController } from './order/order.controller';
 import { ProviderController } from './provider/provider.controller';
 import { ArticleService } from './article/article.service';
 import { Article } from './article/article';
+import { Sale } from './sale/sale';
+import { SaleService } from './sale/sale.service';
+import { SaleController } from './sale/sale.controller';
+import { SaleModule } from './sale/sale.module';
+import { SaleArticle } from './sale-article/sale-article';
+import { SaleArticleService } from './sale-article/sale-article.service';
+import { SaleArticleModule } from './sale-article/sale-article.module';
 
 @Module({
   imports: [
@@ -29,6 +36,8 @@ import { Article } from './article/article';
     ProviderArticleModule,
     OrderModule,
     PrismaModule,
+    SaleModule,
+    SaleArticleModule,
   ],
   controllers: [
     ArticleController,
@@ -37,7 +46,16 @@ import { Article } from './article/article';
     OrderStatusController,
     ProviderController,
     OrderController,
+    SaleController,
   ],
-  providers: [PrismaService, ArticleService, Article],
+  providers: [
+    PrismaService,
+    ArticleService,
+    Article,
+    Sale,
+    SaleService,
+    SaleArticle,
+    SaleArticleService,
+  ],
 })
 export class AppModule {}
