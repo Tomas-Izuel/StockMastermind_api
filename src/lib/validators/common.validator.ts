@@ -1,20 +1,19 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { sortDir } from 'src/data/types/common/common';
+import {
+  PipeTransform,
+  ArgumentMetadata,
+  BadRequestException,
+} from '@nestjs/common';
+import { ZodSchema } from 'zod';
 
-export class CommonPaginationParams {
-  @IsString()
-  @IsOptional()
-  page: string;
-  @IsString()
-  @IsOptional()
-  page_size: string;
-  @IsString()
-  @IsOptional()
-  search: string;
-  @IsEnum(sortDir)
-  @IsOptional()
-  sort: string;
-  @IsEnum(sortDir)
-  @IsOptional()
-  sort_dir: string;
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private schema: ZodSchema) {}
+
+  transform(value: unknown, metadata: ArgumentMetadata) {
+    try {
+      const parsedValue = this.schema.parse(value);
+      return parsedValue;
+    } catch (error) {
+      throw new BadRequestException('Validation failed');
+    }
+  }
 }
