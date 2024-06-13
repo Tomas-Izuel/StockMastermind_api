@@ -14,6 +14,7 @@ import { ArticleModule } from 'src/article/article.module';
     OrderArticleModule,
     OrderStatusModule,
     ProviderModule,
+    ProviderArticleModule,
     ArticleModule,
   ],
   providers: [OrderService, PrismaService, Order],

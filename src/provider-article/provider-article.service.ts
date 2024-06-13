@@ -21,6 +21,16 @@ export class ProviderArticleService {
     return providerArticles;
   }
 
+  async getArticleByProviderAndArticleId(
+    providerId: number,
+    articleId: number,
+  ) {
+    return this.providerArticleRepository.getArticleByProviderAndArticleId(
+      providerId,
+      articleId,
+    );
+  }
+
   async updateArticlePrice(
     articleId: number,
     providerId: number,
@@ -42,15 +52,15 @@ export class ProviderArticleService {
     );
   }
 
-  async injectPriceToArticles(articles, providerId) {
-    const articlesIds = articles.map((article) => article.id);
+  async injectPriceToArticles(articles: any, providerId: number) {
+    const articlesIds = articles.map((article: any) => article.id);
     const articlesPrices =
       await this.providerArticleRepository.getArticlesPriceByProviderId(
         providerId,
         articlesIds,
       );
 
-    return articles.map((article) => {
+    return articles.map((article: any) => {
       const price = articlesPrices.find(
         (articlePrice) => articlePrice.article_id === article.id,
       );

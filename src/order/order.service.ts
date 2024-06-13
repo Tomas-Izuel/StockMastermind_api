@@ -9,6 +9,7 @@ import {
 } from 'src/lib/constants';
 import { CreateOrder } from './data/order.types';
 import { ArticleService } from 'src/article/article.service';
+import { ProviderArticleService } from 'src/provider-article/provider-article.service';
 
 @Injectable()
 export class OrderService {
@@ -17,6 +18,7 @@ export class OrderService {
     private orderArticleService: OrderArticleService,
     private orderStatusService: OrderStatusService,
     private providerService: ProviderService,
+    private providerArticleService: ProviderArticleService,
     private articleService: ArticleService,
   ) {}
 
@@ -41,12 +43,12 @@ export class OrderService {
       const articleWPrices =
         await this.providerService.getArticlesPriceByProviderId(
           provider.id,
-          data.articles.map((article) => article.article_id),
+          data.articles.map((article: any) => article.article_id),
         );
 
-      const subtotal = data.articles.reduce((acc, article) => {
+      const subtotal = data.articles.reduce((acc: any, article: any) => {
         const articlePrice = articleWPrices.find(
-          (articlePrice) => articlePrice.article_id === article.article_id,
+          (articlePrice: any) => articlePrice.article_id === article.article_id,
         );
 
         return acc + articlePrice.price * article.quantity;
@@ -63,7 +65,7 @@ export class OrderService {
       });
 
       await this.orderArticleService.createManyOrderArticles(
-        data.articles.map((article) => ({
+        data.articles.map((article: any) => ({
           ...article,
           order_id: order.id,
         })),
@@ -106,6 +108,48 @@ export class OrderService {
       return this.orderRepository.update(orderId, { status_id: statusId });
     } catch (error) {
       throw new Error('Error changing order status: ' + error);
+    }
+  }
+
+  async verifyIfOrderNeeded(article_id: number) {
+    const article = await this.articleService.getArticleById(article_id);
+    if (!article) {
+      throw new Error('Article not found');
+    }
+
+    if (article.stock < article.order_point) {
+      const provider = await this.providerService.getDefaulProvider();
+
+      const articleProvider =
+        await this.providerArticleService.getArticleByProviderAndArticleId(
+          provider.id,
+          article.id,
+        );
+      if (!provider || !articleProvider) {
+        throw new Error('Provider or article not found');
+      }
+
+      const subtotal =
+        articleProvider.price * (article.max_stock - article.stock);
+      const order = await this.orderRepository.create({
+        code: 'ORDER-' + new Date().getTime(),
+        provider_id: provider.id,
+        date: new Date(),
+        status_id: 1,
+        shipment_count: provider.single_shipment_cost,
+        subtotal: subtotal,
+        total: subtotal + provider.single_shipment_cost,
+      });
+
+      await this.orderArticleService.createManyOrderArticles([
+        {
+          article_id: article.id,
+          order_id: order.id,
+          quantity: article.max_stock - article.stock,
+        },
+      ]);
+
+      return order;
     }
   }
 }
