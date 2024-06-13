@@ -52,23 +52,13 @@ export class ProviderArticleService {
     );
   }
 
-  async injectPriceToArticles(articles: any, providerId: number) {
-    const articlesIds = articles.map((article: any) => article.id);
-    const articlesPrices =
+  async injectPriceToArticles(articlesIds: number[], providerId: number) {
+    const articlesWPrices =
       await this.providerArticleRepository.getArticlesPriceByProviderId(
         providerId,
         articlesIds,
       );
 
-    return articles.map((article: any) => {
-      const price = articlesPrices.find(
-        (articlePrice) => articlePrice.article_id === article.id,
-      );
-
-      return {
-        ...article,
-        price: price ? price.price : null,
-      };
-    });
+    return articlesWPrices;
   }
 }

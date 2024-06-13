@@ -3,6 +3,7 @@ import { ProviderArticleService } from 'src/provider-article/provider-article.se
 import { Provider } from './provider';
 import { CreateProvider } from './data/provider.types';
 import { provider } from '@prisma/client';
+import { CreateProviderDto } from './data/provider.dto';
 
 @Injectable()
 export class ProviderService {
@@ -23,7 +24,7 @@ export class ProviderService {
     return this.providerRepository.getDefaultProvider();
   }
 
-  async createProvider(data: CreateProvider) {
+  async createProvider(data: CreateProviderDto) {
     const provider = await this.providerRepository.create(data.provider);
 
     const articles = data.articles.map((article) => ({
@@ -54,7 +55,11 @@ export class ProviderService {
     return this.providerRepository.update(id, { is_default: true });
   }
 
-  async changeArticlePrice(articleId: number, providerId, price: number) {
+  async changeArticlePrice(
+    articleId: number,
+    providerId: number,
+    price: number,
+  ) {
     return this.providerArticle.updateArticlePrice(
       articleId,
       providerId,
@@ -66,6 +71,6 @@ export class ProviderService {
     providerId: number,
     articlesIds: number[],
   ) {
-    return this.providerArticle.injectPriceToArticles(providerId, articlesIds);
+    return this.providerArticle.injectPriceToArticles(articlesIds, providerId);
   }
 }

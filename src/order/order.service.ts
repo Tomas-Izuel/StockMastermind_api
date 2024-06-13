@@ -56,6 +56,7 @@ export class OrderService {
 
       const order = await this.orderRepository.create({
         ...data,
+        code: 'ORDER-' + new Date().getTime(),
         date: new Date(),
         provider_id: provider.id,
         shipment_count: provider.single_shipment_cost,
