@@ -4,6 +4,7 @@ import { Provider } from './provider';
 import { CreateProvider } from './data/provider.types';
 import { provider } from '@prisma/client';
 import { CreateProviderDto } from './data/provider.dto';
+import { ArticleWithPrice } from 'src/article/data/article.dto';
 
 @Injectable()
 export class ProviderService {
@@ -70,7 +71,7 @@ export class ProviderService {
   async getArticlesPriceByProviderId(
     providerId: number,
     articlesIds: number[],
-  ) {
+  ): Promise<ArticleWithPrice[]> {
     return this.providerArticle.injectPriceToArticles(articlesIds, providerId);
   }
 }

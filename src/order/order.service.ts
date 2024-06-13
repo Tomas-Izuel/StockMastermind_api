@@ -10,6 +10,7 @@ import {
 import { CreateOrder } from './data/order.types';
 import { ArticleService } from 'src/article/article.service';
 import { ProviderArticleService } from 'src/provider-article/provider-article.service';
+import { Article, ArticleOrder, ArticleWithPrice, OrderArticleDTO } from 'src/article/data/article.dto';
 
 @Injectable()
 export class OrderService {
@@ -20,7 +21,7 @@ export class OrderService {
     private providerService: ProviderService,
     private providerArticleService: ProviderArticleService,
     private articleService: ArticleService,
-  ) {}
+  ) { }
 
   async createOrder(data: CreateOrder) {
     try {
@@ -40,15 +41,15 @@ export class OrderService {
         throw new Error('Provider not found');
       }
 
-      const articleWPrices =
+      const articleWPrices: ArticleWithPrice[] =
         await this.providerService.getArticlesPriceByProviderId(
           provider.id,
-          data.articles.map((article: any) => article.article_id),
+          data.articles.map((article: Article) => article.article_id),
         );
 
-      const subtotal = data.articles.reduce((acc: any, article: any) => {
+      const subtotal = data.articles.reduce((acc: number, article: Article) => {
         const articlePrice = articleWPrices.find(
-          (articlePrice: any) => articlePrice.article_id === article.article_id,
+          (articlePrice: ArticleWithPrice) => articlePrice.article_id === article.article_id,
         );
 
         return acc + articlePrice.price * article.quantity;
@@ -66,9 +67,10 @@ export class OrderService {
       });
 
       await this.orderArticleService.createManyOrderArticles(
-        data.articles.map((article: any) => ({
-          ...article,
-          order_id: order.id,
+        data.articles.map((article: Article) => ({
+          article_id: article.article_id!,
+          quantity: article.quantity!,
+          order_id: article.order_id!,
         })),
       );
 

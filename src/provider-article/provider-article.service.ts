@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ProviderArticle } from './provider-article';
 import { provider_article } from '@prisma/client';
+import { ArticleWithPrice } from 'src/article/data/article.dto';
 
 @Injectable()
 export class ProviderArticleService {
@@ -52,8 +53,11 @@ export class ProviderArticleService {
     );
   }
 
-  async injectPriceToArticles(articlesIds: number[], providerId: number) {
-    const articlesWPrices =
+  async injectPriceToArticles(
+    articlesIds: number[],
+    providerId: number,
+  ): Promise<ArticleWithPrice[]> {
+    const articlesWPrices: ArticleWithPrice[] =
       await this.providerArticleRepository.getArticlesPriceByProviderId(
         providerId,
         articlesIds,

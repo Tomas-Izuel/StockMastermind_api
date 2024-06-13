@@ -9,6 +9,36 @@ export class ArticleQueryParams implements CommonPaginationDto {
   family_id: number;
 }
 
+export interface Article {
+  article_id?: number;
+  quantity?: number;
+  order_id?: number;
+}
+
+export interface ArticleOrder {
+  article_id: number;
+  quantity: number;
+}
+
+export interface OrderArticleDTO {
+  id?: number;
+  article_id: number;
+  quantity: number;
+  order_id: number;
+}
+
+
+export interface Data {
+  articles: Article[];
+}
+
+
+export interface ArticleWithPrice {
+  article_id: number;
+  price: number;
+  provider_id: number;
+}
+
 export class CreateArticleDto {
   code: string;
   name: string;
