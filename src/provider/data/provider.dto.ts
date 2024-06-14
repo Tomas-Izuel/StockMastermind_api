@@ -6,7 +6,7 @@ export class CreateProviderDto {
     name: string;
     is_default: boolean;
     single_shipment_cost: number;
-    shipment_time: Date;
+    shipment_time: number;
     shipment_max_size: number;
   };
   articles: CreateProviderArticleDto[];
@@ -17,6 +17,6 @@ export class UpdateProviderDto {
   name?: string;
   is_default?: boolean;
   single_shipment_cost?: number;
-  shipment_time?: Date;
+  shipment_time?: number;
   shipment_max_size?: number;
 }

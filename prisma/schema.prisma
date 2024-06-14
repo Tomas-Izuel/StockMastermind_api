@@ -41,7 +41,7 @@ model provider {
   name        String
   is_default  Boolean
   single_shipment_cost Float
-  shipment_time DateTime
+  shipment_time Int
   shipment_max_size Int
 
   // Relationships
