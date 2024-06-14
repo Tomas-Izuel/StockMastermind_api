@@ -27,6 +27,10 @@ export class ClientService {
   }
 
   async delete(id: number) {
+    const client = await this.clientRepository.findOne(id);
+    if (!client) {
+      return 'Client not found';
+    }
     return this.clientRepository.delete(id);
   }
 }

@@ -36,7 +36,6 @@ export class ClientController {
   }
 
   @Put('/edit/:id')
-  @UsePipes(new ZodValidationPipe(UpdateClientSchema))
   async editClient(
     @Body() data: UpdateClientDto,
     @Param('id', ParseIntPipe) id: number,
