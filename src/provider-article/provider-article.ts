@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { provider_article } from '@prisma/client';
+import { ArticleWithPrice } from 'src/article/data/article.dto';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 
 @Injectable()
@@ -45,7 +46,7 @@ export class ProviderArticle {
   async getArticlesPriceByProviderId(
     providerId: number,
     articlesIds: number[],
-  ) {
+  ): Promise<ArticleWithPrice[]> {
     return this.prismaService.provider_article.findMany({
       where: {
         provider_id: providerId,

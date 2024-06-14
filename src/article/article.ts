@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/lib/prisma/prisma.service';
 import { article } from '@prisma/client';
-import { ArticleQueryParams, ArticleRepository } from './data/article.type';
+import { ArticleFilter, ArticleQueryParams, ArticleRepository } from './data/article.type';
 
 @Injectable()
 export class Article implements ArticleRepository {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
+
+  private getFilters(filter: ArticleFilter) {
+    const where = {};
+    if (filter.family_id) {
+      Object.assign(where, { family_id: filter.family_id })
+    }
+    if (filter?.name) {
+      Object.assign(where, { family_id: filter.family_id })
+    }
+    return where;
+  }
 
   async findAll(filter?: ArticleQueryParams) {
-    const where: any = {};
-
-    if (filter?.family_id) {
-      where['family_id'] = filter;
-    }
-
-    if (filter?.search) {
-      where['name'] = {
-        contains: filter.search,
-      };
-    }
-
+    const where = this.getFilters(filter);
     return this.prismaService.article.findMany({
       where: where,
       orderBy: {

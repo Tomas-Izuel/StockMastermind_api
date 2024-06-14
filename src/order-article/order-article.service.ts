@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { OrderArticle } from './order-article';
+import { OrderArticleDTO } from 'src/article/data/article.dto';
 import { order_article } from '@prisma/client';
+import { OrderArticle } from './order-article';
 
 @Injectable()
 export class OrderArticleService {
   constructor(private orderArticleRepository: OrderArticle) {}
 
-  async createManyOrderArticles(data: Omit<order_article, 'id'>[]) {
+  async createManyOrderArticles(data: Omit<OrderArticleDTO, 'id'>[]) {
     const orderArticles = await this.orderArticleRepository.createMany(data);
     return orderArticles;
   }
