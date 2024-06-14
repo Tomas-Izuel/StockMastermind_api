@@ -12,7 +12,7 @@ export type CreateArticleDto = z.infer<typeof CreateArticleSchema>;
 
 export type ArticleQueryParams = z.infer<typeof ArticleQueryParamsSchema>;
 
-export interface ArticleFilter{
+export interface ArticleFilter extends Filter{
   family_id?: number;
   name?: string;
 }

@@ -8,12 +8,19 @@ export class Article implements ArticleRepository {
   constructor(private prismaService: PrismaService) { }
 
   private getFilters(filter: ArticleFilter) {
-    const where = {};
+    const where: any = {};
     if (filter.family_id) {
-      Object.assign(where, { family_id: filter.family_id })
+      where.family_id = filter.family_id;
     }
-    if (filter?.name) {
-      Object.assign(where, { family_id: filter.family_id })
+    if (filter.name) {
+      where.name = filter.name;
+    }
+    if (filter.search) {
+      const search = filter.search;
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { timezone: { contains: search, mode: 'insensitive' } },
+      ];
     }
     return where;
   }
